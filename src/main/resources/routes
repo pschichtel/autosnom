@@ -1,0 +1,1 @@
+GET        /config/:phoneType/:mac.xml        controllers.MainController.getConfiguration(phoneType: String, mac: String)
