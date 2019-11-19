@@ -4,8 +4,12 @@ version := "0.1"
 
 scalaVersion := "2.13.1"
 
-enablePlugins(PlayService)
-enablePlugins(RoutesCompiler)
+maintainer := "Phillip Schichtel <phillip@schich.tel>"
+
+val proj = (project in file("."))
+    .enablePlugins(PlayService)
+    .enablePlugins(RoutesCompiler)
+    .enablePlugins(AshScriptPlugin)
 
 libraryDependencies := Seq(
     guice,
@@ -14,3 +18,9 @@ libraryDependencies := Seq(
 )
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
+
+sources in (Compile, doc) := Seq.empty
+
+publishArtifact in (Compile, packageDoc) := false
+
+bashScriptTemplateLocation := proj.base / "src" / "main" / "resources" / "launch-script.sh"
