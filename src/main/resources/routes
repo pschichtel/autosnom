@@ -1,2 +1,3 @@
 GET        /config/:phoneType/$mac<[^.]+>.xml        controllers.MainController.getConfiguration(phoneType: String, mac: String)
+GET        /c/:phoneType/$mac<[^.]+>                 controllers.MainController.getConfiguration(phoneType: String, mac: String)
 GET        /$phoneType<[^-]+>-$mac<[^.]+>.htm        controllers.MainController.getConfiguration(phoneType: String, mac: String)
