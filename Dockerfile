@@ -14,7 +14,7 @@ ADD . /build/
 RUN sbt -no-colors dist \
  && unzip target/universal/autosnom-*.zip
 
-FROM adoptopenjdk/openjdk15:alpine-slim
+FROM adoptopenjdk/openjdk14:alpine-slim
 
 RUN adduser -S play \
  && mkdir -p /app/configurations \
