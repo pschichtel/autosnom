@@ -4,12 +4,14 @@ import java.io.FileNotFoundException
 import java.nio.file.{Path, Paths}
 
 import javax.inject.Inject
-import play.api.Configuration
+import play.api.{Configuration, Logger}
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.xml.Elem
 
 class MainController @Inject() (cc: ControllerComponents, conf: Configuration) extends AbstractController(cc) {
+
+    private val logger = Logger(classOf[MainController])
 
     private val configBase: Path = Paths.get(conf.get[String]("phone-config-path"))
     private val configOverridesBase = configBase.resolve("overrides")
@@ -17,17 +19,30 @@ class MainController @Inject() (cc: ControllerComponents, conf: Configuration) e
     def getConfiguration(phoneType: String, mac: String) = Action {
 
         val normalizedMacAddr = mac.replaceAll("[^a-fA-F0-9]", "").toUpperCase
+
+        logger.info(s"Configuration request received: phoneType=$phoneType device=$normalizedMacAddr")
+
         val typeConfPath = configBase.resolve(phoneType + ".xml")
         val deviceConfPath = configOverridesBase.resolve(normalizedMacAddr + ".xml")
+
+        logger.info(s"Loading type configuration $typeConfPath")
+        logger.info(s"Loading device configuration $deviceConfPath")
 
         val typeConf = loadXML(typeConfPath)
         val deviceConf = loadXML(deviceConfPath)
 
         (typeConf, deviceConf) match {
-            case (Some(t), None) => Ok(t)
-            case (None, Some(d)) => Ok(d)
-            case (Some(t), Some(d)) => Ok(mergeTrees(t, d))
-            case (None, None) => NotFound
+            case (Some(t), None) =>
+                logger.warn("phone type configuration found, but no device configuration")
+                Ok(t)
+            case (None, Some(d)) =>
+                logger.warn("device configuration found, but no phone type configuration")
+                Ok(d)
+            case (Some(t), Some(d)) =>
+                Ok(mergeTrees(t, d))
+            case (None, None) =>
+                logger.error("neither phone type nor device configuration found!")
+                NotFound
         }
     }
 
