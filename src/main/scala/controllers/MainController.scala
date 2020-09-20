@@ -16,11 +16,11 @@ class MainController @Inject() (cc: ControllerComponents, conf: Configuration) e
     private val configBase: Path = Paths.get(conf.get[String]("phone-config-path"))
     private val configOverridesBase = configBase.resolve("overrides")
 
-    def getConfiguration(phoneType: String, mac: String) = Action {
+    def getConfiguration(phoneType: String, mac: String) = Action { implicit req =>
 
         val normalizedMacAddr = mac.replaceAll("[^a-fA-F0-9]", "").toUpperCase
 
-        logger.info(s"Configuration request received: phoneType=$phoneType device=$normalizedMacAddr")
+        logger.info(s"Configuration request received by ${req.remoteAddress}: phoneType=$phoneType device=$normalizedMacAddr")
 
         val typeConfPath = configBase.resolve(phoneType + ".xml")
         val deviceConfPath = configOverridesBase.resolve(normalizedMacAddr + ".xml")
