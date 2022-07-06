@@ -2,7 +2,7 @@ name := "autosnom"
 
 version := "0.1"
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.8"
 
 maintainer := "Phillip Schichtel <phillip@schich.tel>"
 
