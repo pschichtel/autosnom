@@ -16,7 +16,7 @@ Compile / doc / sources := Seq.empty
 
 jibRegistry := "ghcr.io"
 jibOrganization := "pschichtel"
-jibName := jibRegistry.value
+jibName := name.value
 
 jibBaseImage := "docker.io/library/eclipse-temurin:21-jre-alpine"
 
