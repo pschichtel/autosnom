@@ -2,25 +2,22 @@ name := "autosnom"
 
 version := "0.1"
 
-scalaVersion := "2.13.8"
-
-maintainer := "Phillip Schichtel <phillip@schich.tel>"
+scalaVersion := "3.4.2"
 
 val proj = (project in file("."))
     .enablePlugins(PlayService)
     .enablePlugins(RoutesCompiler)
-    .enablePlugins(AshScriptPlugin)
 
-libraryDependencies := Seq(
-    guice,
-    akkaHttpServer,
+libraryDependencies ++= Seq(
     logback,
 )
 
-scalacOptions ++= Seq("-unchecked", "-deprecation")
+Compile / doc / sources := Seq.empty
 
-sources in (Compile, doc) := Seq.empty
+jibRegistry := "ghcr.io"
+jibOrganization := "pschichtel"
+jibName := jibRegistry.value
 
-publishArtifact in (Compile, packageDoc) := false
+jibBaseImage := "docker.io/library/eclipse-temurin:21-jre-alpine"
 
-bashScriptTemplateLocation := proj.base / "src" / "main" / "resources" / "launch-script.sh"
+jibJvmFlags := "-Dplay.server.pidfile.path=/dev/null" :: Nil

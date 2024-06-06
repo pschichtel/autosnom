@@ -2,21 +2,19 @@ package controllers
 
 import java.io.FileNotFoundException
 import java.nio.file.{Path, Paths}
-
-import javax.inject.Inject
 import play.api.{Configuration, Logger}
-import play.api.mvc.{AbstractController, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
 import scala.xml.Elem
 
-class MainController @Inject() (cc: ControllerComponents, conf: Configuration) extends AbstractController(cc) {
+class MainController(cc: ControllerComponents, conf: Configuration) extends AbstractController(cc) {
 
     private val logger = Logger(classOf[MainController])
 
     private val configBase: Path = Paths.get(conf.get[String]("phone-config-path"))
     private val configOverridesBase = configBase.resolve("overrides")
 
-    def getConfiguration(phoneType: String, mac: String) = Action { implicit req =>
+    def getConfiguration(phoneType: String, mac: String): Action[AnyContent] = Action { implicit req =>
 
         val normalizedMacAddr = mac.replaceAll("[^a-fA-F0-9]", "").toUpperCase
 
@@ -54,5 +52,9 @@ class MainController @Inject() (cc: ControllerComponents, conf: Configuration) e
 
     private def mergeTrees(left: Elem, right: Elem): Elem = {
         left.copy(child = left.child ++ right.child)
+    }
+
+    def healthcheck(): Action[AnyContent] = Action {
+        Ok("OK")
     }
 }

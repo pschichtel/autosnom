@@ -1,0 +1,30 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build and Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Scala
+        uses: olafurpg/setup-scala@v14
+        with:
+          java-version: "adopt@1.21.0-1"
+      - name: Coursier cache
+        uses: coursier/cache-action@v6
+      - name: Build and Publish
+        env:
+          JIB_TARGET_IMAGE_USERNAME: ${{ github.actor }}
+          JIB_TARGET_IMAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sbt -v -Dfile.encoding=UTF-8 jibImageBuild
+          rm -rf "$HOME/.ivy2/local" || true
+          find $HOME/Library/Caches/Coursier/v1        -name "ivydata-*.properties" -delete || true
+          find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
+          find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
+          find $HOME/.sbt
