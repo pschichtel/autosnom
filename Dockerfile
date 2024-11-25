@@ -14,7 +14,7 @@ ADD . /build/
 RUN sbt -no-colors dist \
  && unzip target/universal/autosnom-*.zip
 
-FROM eclipse-temurin:11-alpine
+FROM eclipse-temurin:21-alpine
 
 RUN adduser -S play \
  && mkdir -p /app/configurations \
