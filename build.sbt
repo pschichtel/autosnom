@@ -2,7 +2,7 @@ name := "autosnom"
 
 version := "0.1"
 
-scalaVersion := "3.4.2"
+scalaVersion := "3.4.3"
 
 val proj = (project in file("."))
     .enablePlugins(PlayService)
