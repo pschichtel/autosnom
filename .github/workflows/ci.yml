@@ -20,5 +20,4 @@ jobs:
         env:
           JIB_TARGET_IMAGE_USERNAME: ${{ github.actor }}
           JIB_TARGET_IMAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          sbt -v -Dfile.encoding=UTF-8 jibImageBuild
+        run: sbt jibImageBuild
