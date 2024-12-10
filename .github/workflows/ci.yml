@@ -15,8 +15,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-      - name: Coursier cache
-        uses: coursier/cache-action@v6
+          cache: sbt
       - name: Build and Publish
         env:
           JIB_TARGET_IMAGE_USERNAME: ${{ github.actor }}
